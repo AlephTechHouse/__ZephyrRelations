@@ -54,4 +54,6 @@ git clone git@github.com-alephtechhouse:alephtechhouse/ZephyrRelations.git
 
 git config user.email "david.yaari@icloud.com"
 git config user.name "David Yaari"
+
+git remote set-url origin git@github.com-alephtechhouse:ZephyrRelations.git
 ```
