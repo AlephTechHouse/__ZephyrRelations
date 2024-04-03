@@ -59,4 +59,7 @@ git remote set-url origin git@github.com-alephtechhouse:ZephyrRelations.git
 
 ssh -T git@github.com-alephtechhouse
 git remote set-url origin git@github.com-alephtechhouse:ZephyrRelations.git
+
+git remote set-url origin git@github.com-alephtechhouse:AlephTechHouse/ZephyrRelations.git
+
 ```
