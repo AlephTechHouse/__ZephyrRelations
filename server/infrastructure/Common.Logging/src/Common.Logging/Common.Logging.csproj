@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 
     <PackageId>ZephyrRelations.Common.Logging</PackageId>
-    <Authors>zephyrrelations</Authors>
+    <Authors>ZephyrRelations Dev Team</Authors>
     <Description>Common.Logging</Description>
     <Company>ZephyrRelations</Company>
     <PackageTags>Logging, Serlog, Seq, ElasticSearch, OpenTelemetry</PackageTags>
