@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
 
     <PackageId>ZephyrRelations.Common.Logging</PackageId>
-    <MinVerTagPrefix>v</MinVerTagPrefix>
     <Authors>zephyrrelations</Authors>
     <Description>Common.Logging</Description>
     <Company>ZephyrRelations</Company>
@@ -21,10 +20,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MinVer" Version="5.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="OpenTelemetry.Exporter.console" Version="1.7.0" />
     <PackageReference Include="OpenTelemetry.Exporter.jaeger" Version="1.5.1" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.7.0" />
