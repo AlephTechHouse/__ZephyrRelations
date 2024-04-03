@@ -54,5 +54,5 @@ jobs:
       - name: Publish Nuget to GitHub Packages
         run: >
           dotnet nuget push "out/*.nupkg"
-          --api-key ${{ secrets.GITHUB_TOKEN}}
+          --api-key ${{ secrets.NUGET_PAT}}
           --source https://nuget.pkg.github.com/AlephTechHouse/index.json
