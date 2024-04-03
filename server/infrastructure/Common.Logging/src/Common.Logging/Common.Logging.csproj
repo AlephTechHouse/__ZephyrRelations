@@ -8,7 +8,7 @@
     <PackageId>ZephyrRelations.Common.Logging</PackageId>
     <Authors>ZephyrRelations Dev Team</Authors>
     <Description>Common.Logging</Description>
-    <Company>ZephyrRelations</Company> 
+    <Company>ZephyrRelations</Company>
     <PackageTags>Logging, Serlog, Seq, ElasticSearch, OpenTelemetry</PackageTags>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
