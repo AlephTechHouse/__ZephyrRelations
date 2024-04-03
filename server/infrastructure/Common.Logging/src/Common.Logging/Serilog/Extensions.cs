@@ -16,14 +16,15 @@ public static class Extensions
     {
         var elasticserchUrl = configuration["ElasticSearchUrl"];
         var seqUrl = configuration["SeqUrl"];
+        var applicationName = configuration["ApplicationName"];
 
-        if (string.IsNullOrWhiteSpace(elasticserchUrl) || string.IsNullOrWhiteSpace(seqUrl))
+        if (string.IsNullOrWhiteSpace(elasticserchUrl) || string.IsNullOrWhiteSpace(seqUrl) || string.IsNullOrWhiteSpace(applicationName))
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .CreateLogger();
 
-            Log.Logger.Error("ElasticSearchUrl or SeqUrl is not configured in appsettings.json");
+            Log.Logger.Error("ElasticSearchUrl or SeqUrl or applicationName is not configured in appsettings.json");
             return hostBuilder;
         }
 
@@ -45,7 +46,7 @@ public static class Extensions
             {
                 AutoRegisterTemplate = true,
                 AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                IndexFormat = $"{(hostBuilder.Properties["ApplicationName"]?.ToString() ?? "default").ToLower()}-{DateTime.UtcNow:yyyy.MM}",
+                IndexFormat = $"{applicationName.ToLower()}-{DateTime.UtcNow:yyyy.MM}",
                 CustomFormatter = new ElasticsearchJsonFormatter(renderMessage: true, inlineFields: true)
             })
             .CreateLogger();

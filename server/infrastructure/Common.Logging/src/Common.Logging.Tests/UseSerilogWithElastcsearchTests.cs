@@ -3,6 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.InMemory;
 
 namespace Common.Logging.Test;
 
@@ -15,7 +18,8 @@ public class UseSerilogWithElastcsearchTests
         var inMemorySettings = new Dictionary<string, string>
     {
         {"ElasticsearchUrl", "http://localhost:9200"},
-        {"SeqUrl", "http://localhost:5341"}
+        {"SeqUrl", "http://localhost:5341"},
+        {"ApplicationName", "YourApplicationName"}
     };
 
         var configuration = new ConfigurationBuilder()
@@ -42,22 +46,28 @@ public class UseSerilogWithElastcsearchTests
     {
         // Arrange
         var inMemorySettings = new Dictionary<string, string>
-    {
-        {"SeqUrl", "http://localhost:5341"}
-    };
+        {
+            {"ElasticsearchUrl", ""},
+            {"SeqUrl", ""},
+            {"ApplicationName", ""}
+        };
 
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemorySettings!)
             .Build();
 
-        var hostBuilder = Host.CreateDefaultBuilder();
+        var hostBuilder = new HostBuilder();
 
-        Exception ex = Record.Exception(() => hostBuilder.UseSerilogWithElasticsearch(configuration));
+        var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
+
+        // Act
+        hostBuilder.UseSerilogWithElasticsearch(configuration);
 
         // Assert
-        Assert.NotNull(ex);
-        Assert.IsType<ArgumentNullException>(ex);
-        Assert.Equal("Value cannot be null. (Parameter 'ElasticSearchUrl or SeqUrl is not configured in appsettings.json')", ex.Message);
+        var logMessage = stringWriter.ToString();
+        Assert.Contains("ElasticSearchUrl or SeqUrl or applicationName is not configured in appsettings.json", logMessage);
+
     }
 }
 
