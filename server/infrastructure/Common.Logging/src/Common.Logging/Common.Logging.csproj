@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <PackageId>ZephyrRelations.Common.Logging</PackageId>
+    <PackageId>ZephyrRelations.Common.Logging</PackageId> 
    <MinVerAutoIncrement>patch</MinVerAutoIncrement>
     <Authors>ZephyrRelations Dev Team</Authors>
     <Description>Common.Logging</Description>
