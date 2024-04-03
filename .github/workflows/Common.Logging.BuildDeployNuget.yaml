@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: >
           dotnet build ${{ env.PROJECT_PATH }}/Common.Logging.csproj
-          --configuration Release /
+          --configuration Release
           --no-restore
 
       - name: Restore Test dependencies
