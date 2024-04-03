@@ -10,73 +10,54 @@ namespace Common.Logging.Serilog;
 
 public static class Extensions
 {
-public static IHostBuilder UseSerilogWithElasticsearch(
-    this IHostBuilder hostBuilder, 
-    IConfiguration configuration)
+    public static IHostBuilder UseSerilogWithElasticsearch(
+        this IHostBuilder hostBuilder,
+        IConfiguration configuration)
     {
-        var configErrorLogger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .CreateLogger();
-
         var elasticserchUrl = configuration["ElasticSearchUrl"];
-
         var seqUrl = configuration["SeqUrl"];
 
         if (string.IsNullOrWhiteSpace(elasticserchUrl) || string.IsNullOrWhiteSpace(seqUrl))
         {
-            configErrorLogger.Error("ElasticSearchUrl or SeqUrl is not configured in appsettings.json");
-            throw new ArgumentNullException("ElasticSearchUrl or SeqUrl is not configured in appsettings.json");
-        }
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
 
-        try{
-            hostBuilder.UseSerilog((hostingContext, loggerConfiguration) =>
-            {
-                loggerConfiguration
-                    .ReadFrom.Configuration(hostingContext.Configuration)
-                    
-                    .Enrich.FromLogContext()
-                    .Enrich.WithMachineName()
-                    .Enrich.WithProcessId()
-                    .Enrich.WithThreadId()
-                    .Enrich.FromLogContext()
-                    .Enrich.WithExceptionDetails()
-                    .Enrich.WithEnvironmentName()
-
-                    .WriteTo.Console(
-                        theme: AnsiConsoleTheme.Code,
-                        outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"
-                    )
-
-                    .WriteTo.Debug(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"
-                    )
-
-                    .WriteTo.Seq(seqUrl!)
-
-                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticserchUrl!))
-                    {
-                        AutoRegisterTemplate = true,
-                        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                        IndexFormat = $"{hostingContext.HostingEnvironment.ApplicationName.ToLower()}-{DateTime.UtcNow:yyyy.MM}",
-                        CustomFormatter = new ElasticsearchJsonFormatter(renderMessage: true, inlineFields: true)
-                    });
-                });
-        }   
-        catch (Exception ex)
-        {
-            configErrorLogger.Error(ex, "Error configuring Serilog with ElasticSearch");
-            throw;
+            Log.Logger.Error("ElasticSearchUrl or SeqUrl is not configured in appsettings.json");
+            return hostBuilder;
         }
 
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
+            .ReadFrom.Configuration(configuration)
+            .Enrich.FromLogContext()
+            .Enrich.WithMachineName()
+            .Enrich.WithProcessId()
+            .Enrich.WithThreadId()
+            .Enrich.WithExceptionDetails()
+            .Enrich.WithEnvironmentName()
+            .WriteTo.Console(
+                theme: AnsiConsoleTheme.Code,
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"
+            )
+            .WriteTo.Debug(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+            .WriteTo.Seq(seqUrl)
+            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticserchUrl))
+            {
+                AutoRegisterTemplate = true,
+                AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                IndexFormat = $"{(hostBuilder.Properties["ApplicationName"]?.ToString() ?? "default").ToLower()}-{DateTime.UtcNow:yyyy.MM}",
+                CustomFormatter = new ElasticsearchJsonFormatter(renderMessage: true, inlineFields: true)
+            })
             .CreateLogger();
-        
+
+        hostBuilder.UseSerilog();
+
         return hostBuilder;
     }
 }
-           
-                   
-       
+
+
+
 
 
 
