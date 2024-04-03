@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
 
     <PackageId>ZephyrRelations.Common.Logging</PackageId>
+    <MinVerAutoIncrement>major|minor|patch(default)</MinVerAutoIncrement>
     <Authors>ZephyrRelations Dev Team</Authors>
     <Description>Common.Logging</Description>
     <Company>ZephyrRelations</Company>
